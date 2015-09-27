@@ -22,4 +22,5 @@ Head over to Richard's [blog](http://www.devjoy.com), and follow him on Twitter 
 ### Presented At
 
 **[DDD East Anglia, Sep 26th 2015, Cambridge](https://http://www.dddeastanglia.com/)**
+
 **[DDD North, Oct 24th 2015, Sunderland](https://http://www.dddnorth.co.uk/)**
