@@ -16,16 +16,14 @@
 
 
 // ---------------------------------------------------------------
-//         Conversions     (|A|)
+//         Single     (|A|)
 // ---------------------------------------------------------------
-
-module Conversions =
+module SingleTotal =
 
     let (|Quarter|) date =
         match date with
         | (_, m, _) when m % 3 = 0 -> m/3
         | (_, m, _) -> (m/3) + 1
-
 
     let describeQuarter d =
         match d with
@@ -35,8 +33,9 @@ module Conversions =
         | Quarter 4 -> "The Sky is Grey"
         | _ -> "Well, this is weird" 
 
+// d gets passed to the 'Quarter' Active Recogniser and matches on the value returned
 
-    type Season = Spring | Summer | Autumn | Winter
+    type Season = Spring|Summer|Autumn|Winter
 
     let (|Season|) (_, month, _) =
         match month with
@@ -44,37 +43,53 @@ module Conversions =
         | m when m >= 6 && m <= 8 -> Summer
         | m when m >= 9 && m <= 11 -> Autumn
         | _ -> Winter
-        // Note: Catch all needed. Month is an integer
 
     let describeSeason d =
         match d with
-        | Season Spring -> "Flowers are blooming"
-        | Season Summer -> "Let's go to the beach"
-        | Season Autumn -> "The days are shorter now"
-        | Season Winter -> "It's cold, wet, and dark"
-        // Note: DU, Exhaustive, no catch all needed, only 4 seasons
+        | Quarter 1 -> "Q1"
+        | Quarter 1 & Season Spring -> "Got to me March"
+        | Quarter 1 | Season Autumn -> "Quarter 1 OR Autumn"
+        | Season Spring -> "Daffodils"
+        | Season Summer -> "Ice-Cream"
+        | Season Autumn -> "Golden Leaves"
+        | Season Winter -> "Snow"
 
 
-    let describeDate d =
-        match d with
-        | Quarter 1 & Season Spring -> "That can only be March"
-        | Quarter 1 -> "January or February"
-        | Season Spring -> "April or May"
-        | Quarter q & Season s -> sprintf "Quarter %d And Season %A" q s
-        // Change the first & to |, causes subsequent rule to be unreacable
-        // Try describeDate (31,12,2015);;
-        // Try changing second & to |, not allowed.
 
 
 // ---------------------------------------------------------------
 //         Multi-Case     (|A|B|)
 // ---------------------------------------------------------------
-    
 
-module MultiCase =
+module Multiple =
+
+    let (|Q1|Q2|Q3|Q4|) m =
+        match m with
+        | 1 | 2 | 3 -> Q1
+        | 4 | 5 | 6 -> Q2
+        | 7 | 8 | 9 -> Q3
+        | 10 | 11 | 12 -> Q4
+        | _ -> Q4
+
+
+    let describeQuarter d =
+        match d with
+        | _, Q1, _ -> "A New Start"
+        | _, Q2, _ -> "Resolutions Broken"
+        | _, Q3, _ -> "All the leaves are brown"
+        | _, Q4, _ -> "The Sky is Grey"
+
+
+
+
+
+
+module BetterDate =
 
     type Month = Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec
          
+    let christmas = (21, May, 2015)
+
     let (|Q1|Q2|Q3|Q4|) (_, m, _) =
         match m with
         | Jan | Feb | Mar -> Q1
@@ -89,8 +104,20 @@ module MultiCase =
         | Sep | Oct | Nov -> Autumn
         | Dec | Jan | Feb -> Winter
 
+    let describeTimeOfYear d =
+        match d with
+        | Q1 | Spring -> "A New Start"
+        | Q2 | Summer -> "Resolutions Broken"
+        | Q3 | Autumn -> "All the leaves are brown"
+        | Q4 | Winter -> "The Sky is Grey"
 
-    // Wrap an untity Enum in a neat Active Pattern
+
+
+
+module WrapEnum =
+    type Month = Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec
+
+    // Wrap an untidy Enum in a neat Active Pattern
     let (|Mon|Tue|Wed|Thu|Fri|Sat|Sun|) (d, m, y) =
         let dateStr = sprintf "%d/%A/%d" d m y
         match System.DateTime.ParseExact(dateStr, "dd/MMM/yyyy", System.Globalization.CultureInfo.InvariantCulture).DayOfWeek with
@@ -102,13 +129,14 @@ module MultiCase =
         | System.DayOfWeek.Saturday -> Sat
         | _ -> Sun
 
-
-    let describeDate d =
-        match d with
-        | Q1 & Spring -> "That can only be March"
-        | Q1 -> "January or February"
-        | Spring -> "April or May"
-        | (31,Dec,_) -> "New Years Eve"
-        | _ -> "Whatever"
+    let ChildsDestiny birthday =
+        match birthday with
+        | Mon -> "Fair of face"
+        | Tue -> "Full of grace"
+        | Wed -> "Full of woe"
+        | Thu -> "Far to go"
+        | Fri -> "Loving and giving"
+        | Sat -> "Works had for a living"
+        | Sun -> "Fair, wise, and good in every way"
 
 

@@ -1,43 +1,11 @@
-﻿
-// ---------------------------------------------------------------
-// THE BASICS
-//
-//         Functions & Partial Application 
-// ---------------------------------------------------------------
-
-// Write a Negate Function, Look at it's signature
-
-
-// Write a function (Add) that adds two integers, Look at it's signature
-// Note that it is a function that returns a function.
-
-
-// Write a function (Increment), that partially applies the Add function
-
-
-// ---------------------------------------------------------------
-//         Type Inference
-// ---------------------------------------------------------------
-
-// Use each of the following in a 'let' binding, and look at the inferred type
-// 10, 1.5, "Hello World", [0 .. 99], (26, "Sep", 2015)
-
-
-
-
-
-// ---------------------------------------------------------------
+﻿// ---------------------------------------------------------------
+// BASICS
 //         Destructuring Assignment
 // ---------------------------------------------------------------
 
-// Destructure a tuple (1, 2, 3) into (a, b, c)
+// Destructure a tuple (1, 2, 3) into (a, b, c) : The shape must match
 
-
-// Destructure the same tuple but ignore one of the elements
-
-
-// Write a function to shift the elements in a tuple to the left
-
+// Ignore one of the elements: Shape must still match, but don't need to match all elements
 
 
 // ---------------------------------------------------------------
@@ -46,25 +14,21 @@
 //         The Match Expression
 // ---------------------------------------------------------------
 
-// Describe a date using a simple let binding and sprintf
+// Use a tuple to represent a date
+
+// Describe a date by destructuring the params 
+
+// Convert to a match expression
 
 
-
-// Describe a date by destructuring in the params 
-
-
-
-// Describe a date using a match expression
-
-
-
-// Add come clauses to the match expression: New Years Eve, Christmas, New Decade, New Month etc.
-
+// Add a clause for New Years Eve 1999
+// Add a clause for any Christmas
+// Extract and display which Christmas it is 
 
 
 // Notice we need a catch all clause
-
-
+// Notice how ease it is to represent an illegal date
+// Notice we can only pattern match on numbers that are in the tuple
 
 
 // ---------------------------------------------------------------
@@ -73,81 +37,65 @@
 //         Matching On Abstractions
 // ---------------------------------------------------------------
 
-// Consider some abstractions over dates, how can we implement them
-// Note that all dates translate to Day Of the Week, Quarter, Season
-// The rest "may" be true of some dates, but not all
+// Consider some abstractions over dates, how can we implement them?
+// All dates translate to Day Of the Week, Quarter, Season
+// Some Abstractions "may" be true of some dates, but not all 
+// e.g. End Of Month, Tuesday
 
 // Conversion
 // -----------
-// Day Of The Week
 // Quarter
-// Season
+    // Take a date, return an int 1, 2, 3, or 4
 
-// Maybe
-// -----------
-// New Years Eve
-// Month End
-// Holiday
-// Weekend
+    // Notice we could write a function Quarter(date) and match 1, 2, 3, 4
+    // But using an active pattern allows us to mix with other matches
+    // E.g. add a match for Christmas
 
-
-// ---------------------------------------------------------------
-//         Conversions
-// ---------------------------------------------------------------
-
-// Implement a conversion from a date to a Quarter
+    // How would we implement 
+    // Season:   String?
+    // Day Of The Week:   String?  Int?
 
 
-
-// Match on the 4 quarters. Notice we need a catch all clause.
-
-
-
-// Create a Season Discriminated Union
-
-
-
-// Implement a conversion from a date to a Season
-
-
-
-// Match on the 4 seasons, note we don't need a catch all
-
-
-
-// Quarter 1 and Season Spring -> "That can only be March"
-
-// Quarter 1 -> "January or February"
-
-// Season Spring
-
-// Change the first & to |, causes subsequent rule to be unreacable
+//  For Season, make a Discriminated Union
+    //  Match on Season, notice we don't need a catch all
+    //  Notice we can mix Quarter and Season
+    //  Notice that like Quarter, Season returns a value, we name the Recognizer in the match
+    //  Notice we can combine patterns Quarter & Season, Quarter | Season
+    //  Noice the compiler will show unreachable clauses
 
 
 // ---------------------------------------------------------------
-//         Multi-Case
+// ACTIVE PATTERNS
+//
+//         Multiple Value Recognisers
 // ---------------------------------------------------------------
 
+//  Create a Multiple Recogniser Q1|Q2|Q3|Q4
 
-// Define a Month Discriminated Union Jan, Feb, Mar...etc.
-         
-
-   
-// Define a Multi-Case Active Recogniser for Q1, Q2, Q3 & Q4
-
+    // Notice we match on month which is still an integer
+    // So we need a catch all
+    // Notice we can match directly on Q1, Q2 etc.
 
 
-// Define a Multi-Case Active Recogniser for Spring, Summer, Autumn, Winter
+// ---------------------------------------------------------------
+// Rethinking Date
+//
+//          Make illegal months unrepresentable
+// ---------------------------------------------------------------
+
+// Let's re-think Date
+    // Use a Discriminated Union for Month
+    // Now we can write exhaustive recognisers like Quarter and Season, without catch-alls
 
 
+// ---------------------------------------------------------------
+// Wrapping Enums
+//
+//          Enable pattern matching against enums
+// ---------------------------------------------------------------
 
-// Define a Multi-Case Active Recogniser for Mon, Tue Wed...etc.
-
-
-
-// Rewrite the DescribeDate function from above using the new Active Recognisers
-
-
+    // Wrap day of the week
+    // Child's Destiny 
 
 
 // ---------------------------------------------------------------
@@ -157,56 +105,25 @@
 // ---------------------------------------------------------------
 
 // Define a Partial Active Recognizer for New Years Eve, use the Month DU defined above
-
-
-
 // Define a Partial Active Recognizer for New Years Day, use the Month DU defined above
 
+// Define partials for Weekend and Weekday
+// Note matching on partials isn't exhaustive
 
-
-// Define a Partial Active Recognizer for Weekend, use the Day Multi-Case Recognizer defined above
-
-
-
-// Define a Partial Active Recognizer for Weekday, use the Weekend Recognizer defined above
-
-
-
-// Define a Multi-Case Active Recognizer for Weekend|Weekday
+// Define a multiple using Weekend and Weekday
+// Note that matching on a multiple is exhaustive
 
 
 // ---------------------------------------------------------------
-//         Partial Application
+// PARAMS
+//
+//         Partial
 // ---------------------------------------------------------------
 
-// Define a Partial Active Recognizer for Holiday, pass an extra arg, a list of holidays (Day, Month)
+// Create Partial Recognisers for Multiples of 400, 100 and 4
+// Implement a Partial Leap Year recogniser from these.
 
+// Create a partial recogniser MultipleOf that takes two arguments
+// Implement a Partial Leap Year recogniser from that.
 
-
-// Define a list of Holidays (Day, Month)
-
-
-
-// Partially Apply the Holiday Recognizer with the list of holidays to create a Year Specific Recognizer
-
-
-
-// Define a Partial Recognizer for MultipleOf
-
-
-
-// Define a Partial Recognizer for Leap Year, that uses MultipleOf
-
-
-
-// Define a conversion for LastDayOfMonth that matches on a (Month, Year)
-
-
-
-// Define a partial recogniser for MonthEnd that uses LastDayOfMonth
-
-
-
-// Write a Describe Date function that uses the various Recognisers and combines them.
-
-
+// Show we can partially apply MultipleOf to create the others
